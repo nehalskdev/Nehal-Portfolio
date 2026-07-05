@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Poppins, Montserrat, Fira_Code } from "next/font/google";
 import ThemeProvider from "@/components/ThemeProvider";
+import { socialLinks, youtubeChannelUrl } from "@/lib/data";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -22,44 +23,69 @@ const firaCode = Fira_Code({
 });
 
 const siteUrl = "https://nehal-web-portfolio.vercel.app";
+const title = "Nehal Shaikh - Frontend Developer";
+const description =
+  "Portfolio of Nehal Shaikh, a Jr Frontend Developer at Scott Sports SA building with Next.js, React, and TypeScript. Explore projects, skills, and experience.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Nehal Shaikh - Frontend Developer & Content Creator",
-  description:
-    "Nehal's web development portfolio showcasing projects, skills, and contact info.",
-  keywords: ["web developer", "portfolio", "React", "Next.js", "JavaScript", "Nehal"],
-  authors: [{ name: "Nehal Shaikh" }],
+  title: {
+    default: title,
+    template: `%s | ${title}`,
+  },
+  description,
+  keywords: [
+    "web developer",
+    "portfolio",
+    "React",
+    "Next.js",
+    "TypeScript",
+    "JavaScript",
+    "Nehal Shaikh",
+  ],
+  authors: [{ name: "Nehal Shaikh", url: siteUrl }],
+  creator: "Nehal Shaikh",
   alternates: {
     canonical: siteUrl,
   },
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
-    title: "Nehal Shaikh - JavaScript Developer Portfolio",
-    description:
-      "From data analytics to frontend development - Explore my coding projects and skills.",
+    title,
+    description,
     type: "website",
     url: siteUrl,
     siteName: "Nehal Shaikh's Portfolio",
-    images: [
-      {
-        url: "/assets/Favicon.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Nehal Shaikh, Frontend Developer",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     creator: "@Nehal_s_k",
-    title: "Nehal Shaikh - JS Developer",
-    description:
-      "From data analytics to frontend development - Explore my coding projects and skills.",
-    images: ["/assets/Favicon.jpg"],
+    title,
+    description,
   },
-  other: {
-    "theme-color": "#4285f4",
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#6366f1" },
+    { media: "(prefers-color-scheme: dark)", color: "#4338ca" },
+  ],
+};
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Nehal Shaikh",
+  url: siteUrl,
+  jobTitle: "Jr Frontend Developer",
+  worksFor: {
+    "@type": "Organization",
+    name: "Scott Sports SA",
   },
+  knowsAbout: ["Next.js", "React", "TypeScript", "JavaScript"],
+  sameAs: [socialLinks.linkedin, socialLinks.github, youtubeChannelUrl],
 };
 
 export default function RootLayout({
@@ -74,6 +100,10 @@ export default function RootLayout({
       className={`${poppins.variable} ${montserrat.variable} ${firaCode.variable}`}
     >
       <body className="min-h-screen font-sans leading-relaxed">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
